@@ -2,17 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-type MemberName =
-  | "Sarthak"
-  | "Srihita"
-  | "Charvik"
-  | "Lohitaksh";
-
 type MemberStats = {
   Sarthak: number;
   Srihita: number;
   Charvik: number;
-  Lohitaksh: number;
 };
 
 type Update = {
@@ -28,10 +21,7 @@ type GitHubStats = {
   updates: Update[];
 };
 
-const members: {
-  name: MemberName;
-  color: string;
-}[] = [
+const members = [
   {
     name: "Sarthak",
     color: "bg-green-500",
@@ -44,24 +34,21 @@ const members: {
     name: "Charvik",
     color: "bg-blue-500",
   },
-  {
-    name: "Lohitaksh",
-    color: "bg-yellow-500",
-  },
 ];
 
 const CANVA_LINK =
   "https://canva.link/y0mfwcyz37p6tv9";
 
+const NEW_WEBSITE_LINK =
+  "https://www.canva.com/design/DAHS_Cb9nw4/c801hi8IKpiKBKUdkCvUHA/edit";
+
 export default function Home() {
-  const [showCommit, setShowCommit] =
-    useState(false);
+  const [showCommit, setShowCommit] = useState(false);
 
   const [stats, setStats] =
     useState<GitHubStats | null>(null);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
   async function loadStats() {
     try {
@@ -111,37 +98,68 @@ export default function Home() {
       {/* HEADER */}
 
       <header className="border-b border-gray-800">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
+          
+          {/* LOGO / TITLE */}
+
           <div>
             <h1 className="text-2xl font-bold">
               📊 PPT Tracker
             </h1>
 
             <p className="text-sm text-gray-400">
-              Sarthak · Srihita · Charvik ·
-              Lohitaksh
+              Sarthak · Srihita · Charvik
             </p>
           </div>
 
-          <a
-            href={CANVA_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-lg bg-purple-600 px-4 py-2 font-medium transition hover:bg-purple-500"
-          >
-            🎨 Open Canva
-          </a>
+          {/* WEBSITE NAVIGATION */}
+
+          <nav className="flex flex-wrap items-center gap-2">
+            
+            {/* TRACKER */}
+
+            <a
+              href="/"
+              className="rounded-lg bg-green-600 px-4 py-2 font-medium transition hover:bg-green-500"
+            >
+              📊 PPT Tracker
+            </a>
+
+            {/* SOCIAL STUDIES PPT */}
+
+            <a
+              href={CANVA_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg bg-purple-600 px-4 py-2 font-medium transition hover:bg-purple-500"
+            >
+              🎨 Social Studies PPT
+            </a>
+
+            {/* NEW WEBSITE */}
+
+            <a
+              href={NEW_WEBSITE_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg bg-blue-600 px-4 py-2 font-medium transition hover:bg-blue-500"
+            >
+              🌐 New Website
+            </a>
+          </nav>
         </div>
       </header>
 
       {/* MAIN */}
 
       <div className="mx-auto max-w-6xl px-6 py-8">
+
         {/* PROJECT */}
 
         <section className="mb-8">
           <div className="rounded-xl border border-gray-800 bg-[#161b22] p-6">
             <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+
               <div>
                 <p className="text-sm font-medium text-gray-500">
                   OUR PRESENTATION
@@ -165,6 +183,7 @@ export default function Home() {
                   GitHub Connected
                 </span>
               </div>
+
             </div>
           </div>
         </section>
@@ -173,8 +192,11 @@ export default function Home() {
 
         <section className="mb-8">
           <div className="rounded-xl border border-purple-900/50 bg-[#161b22] p-6">
+
             <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
+
               <div className="flex items-center gap-4">
+
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-600/20 text-2xl">
                   🎨
                 </div>
@@ -188,6 +210,7 @@ export default function Home() {
                     Our Canva presentation
                   </p>
                 </div>
+
               </div>
 
               <a
@@ -198,17 +221,20 @@ export default function Home() {
               >
                 Open Presentation →
               </a>
+
             </div>
           </div>
         </section>
 
         {/* MEMBERS */}
 
-        <section className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="mb-8 grid gap-4 md:grid-cols-3">
+
           {members.map((member) => {
+
             const count =
               stats?.members[
-                member.name
+                member.name as keyof MemberStats
               ] ?? 0;
 
             return (
@@ -216,7 +242,9 @@ export default function Home() {
                 key={member.name}
                 className="rounded-xl border border-gray-800 bg-[#161b22] p-5"
               >
+
                 <div className="flex items-center gap-3">
+
                   <div
                     className={`h-4 w-4 rounded-full ${member.color}`}
                   />
@@ -224,12 +252,11 @@ export default function Home() {
                   <h3 className="font-semibold">
                     {member.name}
                   </h3>
+
                 </div>
 
                 <p className="mt-4 text-3xl font-bold">
-                  {loading
-                    ? "..."
-                    : count}
+                  {loading ? "..." : count}
                 </p>
 
                 <p className="text-sm text-gray-500">
@@ -237,34 +264,37 @@ export default function Home() {
                     ? "commit"
                     : "commits"}
                 </p>
+
               </div>
             );
           })}
+
         </section>
 
         {/* CONTRIBUTION GRAPH */}
 
         <section className="mb-8 rounded-xl border border-gray-800 bg-[#161b22] p-6">
+
           <div className="mb-5 flex items-center justify-between">
+
             <div>
               <h2 className="text-lg font-semibold">
                 Contributions
               </h2>
 
               <p className="text-sm text-gray-500">
-                {stats?.total ?? 0} total
-                GitHub commits
+                {stats?.total ?? 0} total GitHub commits
               </p>
             </div>
+
           </div>
 
           <ContributionGraph
-            updates={
-              stats?.updates ?? []
-            }
+            updates={stats?.updates ?? []}
           />
 
           <div className="mt-4 flex items-center justify-end gap-2 text-xs text-gray-500">
+
             <span>Less</span>
 
             <span className="h-3 w-3 rounded-sm bg-[#21262d]" />
@@ -274,13 +304,17 @@ export default function Home() {
             <span className="h-3 w-3 rounded-sm bg-green-400" />
 
             <span>More</span>
+
           </div>
+
         </section>
 
         {/* RECENT UPDATES */}
 
         <section className="rounded-xl border border-gray-800 bg-[#161b22] p-6">
+
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
             <div>
               <h2 className="text-xl font-semibold">
                 Recent Updates
@@ -299,17 +333,19 @@ export default function Home() {
             >
               + Create Commit
             </button>
+
           </div>
 
           {loading ? (
+
             <div className="py-10 text-center text-gray-500">
               Loading GitHub activity...
             </div>
-          ) : (
-            (stats?.updates?.length ?? 0) ===
-            0
-          ) ? (
+
+          ) : (stats?.updates?.length ?? 0) === 0 ? (
+
             <div className="rounded-lg border border-dashed border-gray-700 py-10 text-center">
+
               <div className="text-3xl">
                 📭
               </div>
@@ -321,22 +357,38 @@ export default function Home() {
               <p className="mt-1 text-sm text-gray-500">
                 Create your first update.
               </p>
+
             </div>
+
           ) : (
+
             <div className="space-y-5">
+
               {stats?.updates?.map(
                 (update) => (
+
                   <div
                     key={update.sha}
                     className="flex gap-4 border-b border-gray-800 pb-5 last:border-0"
                   >
+
                     <div
-                      className={`mt-1 h-3 w-3 shrink-0 rounded-full ${getMemberColor(
-                        update.person
-                      )}`}
+                      className={`mt-1 h-3 w-3 shrink-0 rounded-full ${
+                        update.person ===
+                        "Sarthak"
+                          ? "bg-green-500"
+                          : update.person ===
+                            "Srihita"
+                          ? "bg-purple-500"
+                          : update.person ===
+                            "Charvik"
+                          ? "bg-blue-500"
+                          : "bg-gray-500"
+                      }`}
                     />
 
                     <div className="min-w-0">
+
                       <p className="font-semibold">
                         {update.person}
                       </p>
@@ -350,13 +402,19 @@ export default function Home() {
                           update.date
                         )}
                       </p>
+
                     </div>
+
                   </div>
                 )
               )}
+
             </div>
+
           )}
+
         </section>
+
       </div>
 
       {/* COMMIT MODAL */}
@@ -369,32 +427,9 @@ export default function Home() {
           }}
         />
       )}
+
     </main>
   );
-}
-
-/* MEMBER COLORS */
-
-function getMemberColor(
-  person: string
-) {
-  if (person === "Sarthak") {
-    return "bg-green-500";
-  }
-
-  if (person === "Srihita") {
-    return "bg-purple-500";
-  }
-
-  if (person === "Charvik") {
-    return "bg-blue-500";
-  }
-
-  if (person === "Lohitaksh") {
-    return "bg-yellow-500";
-  }
-
-  return "bg-gray-500";
 }
 
 /* CONTRIBUTION GRAPH */
@@ -409,9 +444,8 @@ function ContributionGraph({
   const days = Array.from(
     { length: 364 },
     (_, index) => {
-      const date = new Date(
-        today
-      );
+
+      const date = new Date(today);
 
       date.setDate(
         today.getDate() -
@@ -428,15 +462,17 @@ function ContributionGraph({
   > = {};
 
   updates.forEach((update) => {
+
     if (!update.date) return;
 
     const date = new Date(
       update.date
     );
 
-    const key = date
-      .toISOString()
-      .split("T")[0];
+    const key =
+      date
+        .toISOString()
+        .split("T")[0];
 
     counts[key] =
       (counts[key] || 0) + 1;
@@ -444,11 +480,15 @@ function ContributionGraph({
 
   return (
     <div className="overflow-x-auto">
+
       <div className="flex min-w-[900px] gap-1">
+
         {days.map((date) => {
-          const key = date
-            .toISOString()
-            .split("T")[0];
+
+          const key =
+            date
+              .toISOString()
+              .split("T")[0];
 
           const count =
             counts[key] || 0;
@@ -476,7 +516,9 @@ function ContributionGraph({
             />
           );
         })}
+
       </div>
+
     </div>
   );
 }
@@ -488,10 +530,9 @@ function CommitModal({
 }: {
   onClose: () => void;
 }) {
+
   const [person, setPerson] =
-    useState<MemberName>(
-      "Sarthak"
-    );
+    useState("Sarthak");
 
   const [message, setMessage] =
     useState("");
@@ -506,10 +547,12 @@ function CommitModal({
     useState("");
 
   async function createCommit() {
+
     setError("");
     setSuccess("");
 
     if (!message.trim()) {
+
       setError(
         "Please enter what you changed."
       );
@@ -520,6 +563,7 @@ function CommitModal({
     setLoading(true);
 
     try {
+
       const response =
         await fetch(
           "/api/github/commit",
@@ -543,6 +587,7 @@ function CommitModal({
         await response.json();
 
       if (!response.ok) {
+
         throw new Error(
           data.error ||
             "Failed to create GitHub commit."
@@ -556,24 +601,36 @@ function CommitModal({
       setMessage("");
 
       setTimeout(() => {
+
         onClose();
+
         window.location.reload();
+
       }, 1000);
+
     } catch (error) {
+
       setError(
         error instanceof Error
           ? error.message
           : "Something went wrong."
       );
+
     } finally {
+
       setLoading(false);
+
     }
   }
 
   return (
+
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+
       <div className="w-full max-w-md rounded-xl border border-gray-800 bg-[#161b22] p-6 shadow-2xl">
+
         <div className="mb-5 flex items-center justify-between">
+
           <h2 className="text-xl font-bold">
             Create Commit
           </h2>
@@ -585,9 +642,8 @@ function CommitModal({
           >
             ×
           </button>
-        </div>
 
-        {/* PERSON */}
+        </div>
 
         <label className="mb-2 block text-sm font-medium text-gray-400">
           Who made the update?
@@ -597,20 +653,24 @@ function CommitModal({
           value={person}
           onChange={(event) =>
             setPerson(
-              event.target
-                .value as MemberName
+              event.target.value
             )
           }
           disabled={loading}
           className="mb-5 w-full rounded-lg border border-gray-700 bg-[#0d1117] p-3 text-white outline-none focus:border-green-500"
         >
-          <option>Sarthak</option>
-          <option>Srihita</option>
-          <option>Charvik</option>
-          <option>Lohitaksh</option>
-        </select>
+          <option>
+            Sarthak
+          </option>
 
-        {/* MESSAGE */}
+          <option>
+            Srihita
+          </option>
+
+          <option>
+            Charvik
+          </option>
+        </select>
 
         <label className="mb-2 block text-sm font-medium text-gray-400">
           What did you update?
@@ -629,15 +689,11 @@ function CommitModal({
           className="mb-4 w-full resize-none rounded-lg border border-gray-700 bg-[#0d1117] p-3 text-white outline-none placeholder:text-gray-600 focus:border-green-500"
         />
 
-        {/* ERROR */}
-
         {error && (
           <div className="mb-4 rounded-lg border border-red-800 bg-red-950/40 p-3 text-sm text-red-300">
             ❌ {error}
           </div>
         )}
-
-        {/* SUCCESS */}
 
         {success && (
           <div className="mb-4 rounded-lg border border-green-800 bg-green-950/40 p-3 text-sm text-green-300">
@@ -645,9 +701,8 @@ function CommitModal({
           </div>
         )}
 
-        {/* BUTTONS */}
-
         <div className="flex justify-end gap-3">
+
           <button
             onClick={onClose}
             disabled={loading}
@@ -665,8 +720,11 @@ function CommitModal({
               ? "Creating..."
               : "Create Commit"}
           </button>
+
         </div>
+
       </div>
+
     </div>
   );
 }
@@ -676,14 +734,17 @@ function CommitModal({
 function formatDate(
   date: string | null
 ) {
-  if (!date) {
+
+  if (!date)
     return "Unknown time";
-  }
 
   const d = new Date(date);
 
-  return d.toLocaleString([], {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
+  return d.toLocaleString(
+    [],
+    {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }
+  );
 }
