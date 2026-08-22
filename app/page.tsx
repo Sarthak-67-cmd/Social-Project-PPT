@@ -2,10 +2,17 @@
 
 import { useEffect, useState } from "react";
 
+type MemberName =
+  | "Sarthak"
+  | "Srihita"
+  | "Charvik"
+  | "Lohitaksh";
+
 type MemberStats = {
   Sarthak: number;
   Srihita: number;
   Charvik: number;
+  Lohitaksh: number;
 };
 
 type Update = {
@@ -21,7 +28,10 @@ type GitHubStats = {
   updates: Update[];
 };
 
-const members = [
+const members: {
+  name: MemberName;
+  color: string;
+}[] = [
   {
     name: "Sarthak",
     color: "bg-green-500",
@@ -34,38 +44,51 @@ const members = [
     name: "Charvik",
     color: "bg-blue-500",
   },
+  {
+    name: "Lohitaksh",
+    color: "bg-yellow-500",
+  },
 ];
 
-const CANVA_LINK = "https://canva.link/y0mfwcyz37p6tv9";
+const CANVA_LINK =
+  "https://canva.link/y0mfwcyz37p6tv9";
 
 export default function Home() {
-  const [showCommit, setShowCommit] = useState(false);
+  const [showCommit, setShowCommit] =
+    useState(false);
 
-  const [stats, setStats] = useState<GitHubStats | null>(
-    null
-  );
+  const [stats, setStats] =
+    useState<GitHubStats | null>(null);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] =
+    useState(true);
 
   async function loadStats() {
     try {
       setLoading(true);
 
-      const response = await fetch("/api/github/stats", {
-        cache: "no-store",
-      });
+      const response = await fetch(
+        "/api/github/stats",
+        {
+          cache: "no-store",
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok) {
         throw new Error(
-          data.error || "Failed to load GitHub data"
+          data.error ||
+            "Failed to load GitHub data"
         );
       }
 
       setStats(data);
     } catch (error) {
-      console.error("Stats error:", error);
+      console.error(
+        "Stats error:",
+        error
+      );
     } finally {
       setLoading(false);
     }
@@ -74,10 +97,13 @@ export default function Home() {
   useEffect(() => {
     loadStats();
 
-    // Automatically update the dashboard every 30 seconds.
-    const interval = setInterval(loadStats, 30_000);
+    const interval = setInterval(
+      loadStats,
+      30_000
+    );
 
-    return () => clearInterval(interval);
+    return () =>
+      clearInterval(interval);
   }, []);
 
   return (
@@ -92,7 +118,8 @@ export default function Home() {
             </h1>
 
             <p className="text-sm text-gray-400">
-              Sarthak · Srihita · Charvik
+              Sarthak · Srihita · Charvik ·
+              Lohitaksh
             </p>
           </div>
 
@@ -125,8 +152,9 @@ export default function Home() {
                 </h2>
 
                 <p className="mt-2 text-sm text-gray-400">
-                  Work together on our Canva presentation and
-                  track every update with GitHub.
+                  Work together on our Canva
+                  presentation and track every
+                  update with GitHub.
                 </p>
               </div>
 
@@ -176,11 +204,11 @@ export default function Home() {
 
         {/* MEMBERS */}
 
-        <section className="mb-8 grid gap-4 md:grid-cols-3">
+        <section className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {members.map((member) => {
             const count =
               stats?.members[
-                member.name as keyof MemberStats
+                member.name
               ] ?? 0;
 
             return (
@@ -199,11 +227,15 @@ export default function Home() {
                 </div>
 
                 <p className="mt-4 text-3xl font-bold">
-                  {loading ? "..." : count}
+                  {loading
+                    ? "..."
+                    : count}
                 </p>
 
                 <p className="text-sm text-gray-500">
-                  {count === 1 ? "commit" : "commits"}
+                  {count === 1
+                    ? "commit"
+                    : "commits"}
                 </p>
               </div>
             );
@@ -220,13 +252,16 @@ export default function Home() {
               </h2>
 
               <p className="text-sm text-gray-500">
-                {stats?.total ?? 0} total GitHub commits
+                {stats?.total ?? 0} total
+                GitHub commits
               </p>
             </div>
           </div>
 
           <ContributionGraph
-            updates={stats?.updates ?? []}
+            updates={
+              stats?.updates ?? []
+            }
           />
 
           <div className="mt-4 flex items-center justify-end gap-2 text-xs text-gray-500">
@@ -257,7 +292,9 @@ export default function Home() {
             </div>
 
             <button
-              onClick={() => setShowCommit(true)}
+              onClick={() =>
+                setShowCommit(true)
+              }
               className="rounded-lg bg-green-600 px-4 py-2 font-medium transition hover:bg-green-500"
             >
               + Create Commit
@@ -268,9 +305,14 @@ export default function Home() {
             <div className="py-10 text-center text-gray-500">
               Loading GitHub activity...
             </div>
-          ) : (stats?.updates?.length ?? 0) === 0 ? (
+          ) : (
+            (stats?.updates?.length ?? 0) ===
+            0
+          ) ? (
             <div className="rounded-lg border border-dashed border-gray-700 py-10 text-center">
-              <div className="text-3xl">📭</div>
+              <div className="text-3xl">
+                📭
+              </div>
 
               <p className="mt-3 font-medium">
                 No commits yet
@@ -282,38 +324,36 @@ export default function Home() {
             </div>
           ) : (
             <div className="space-y-5">
-              {stats?.updates?.map((update) => (
-                <div
-                  key={update.sha}
-                  className="flex gap-4 border-b border-gray-800 pb-5 last:border-0"
-                >
+              {stats?.updates?.map(
+                (update) => (
                   <div
-                    className={`mt-1 h-3 w-3 shrink-0 rounded-full ${
-                      update.person === "Sarthak"
-                        ? "bg-green-500"
-                        : update.person === "Srihita"
-                        ? "bg-purple-500"
-                        : update.person === "Charvik"
-                        ? "bg-blue-500"
-                        : "bg-gray-500"
-                    }`}
-                  />
+                    key={update.sha}
+                    className="flex gap-4 border-b border-gray-800 pb-5 last:border-0"
+                  >
+                    <div
+                      className={`mt-1 h-3 w-3 shrink-0 rounded-full ${getMemberColor(
+                        update.person
+                      )}`}
+                    />
 
-                  <div className="min-w-0">
-                    <p className="font-semibold">
-                      {update.person}
-                    </p>
+                    <div className="min-w-0">
+                      <p className="font-semibold">
+                        {update.person}
+                      </p>
 
-                    <p className="text-gray-300">
-                      {update.message}
-                    </p>
+                      <p className="text-gray-300">
+                        {update.message}
+                      </p>
 
-                    <p className="mt-1 text-sm text-gray-500">
-                      {formatDate(update.date)}
-                    </p>
+                      <p className="mt-1 text-sm text-gray-500">
+                        {formatDate(
+                          update.date
+                        )}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              )}
             </div>
           )}
         </section>
@@ -333,6 +373,30 @@ export default function Home() {
   );
 }
 
+/* MEMBER COLORS */
+
+function getMemberColor(
+  person: string
+) {
+  if (person === "Sarthak") {
+    return "bg-green-500";
+  }
+
+  if (person === "Srihita") {
+    return "bg-purple-500";
+  }
+
+  if (person === "Charvik") {
+    return "bg-blue-500";
+  }
+
+  if (person === "Lohitaksh") {
+    return "bg-yellow-500";
+  }
+
+  return "bg-gray-500";
+}
+
 /* CONTRIBUTION GRAPH */
 
 function ContributionGraph({
@@ -345,37 +409,52 @@ function ContributionGraph({
   const days = Array.from(
     { length: 364 },
     (_, index) => {
-      const date = new Date(today);
+      const date = new Date(
+        today
+      );
 
       date.setDate(
-        today.getDate() - (363 - index)
+        today.getDate() -
+          (363 - index)
       );
 
       return date;
     }
   );
 
-  const counts: Record<string, number> = {};
+  const counts: Record<
+    string,
+    number
+  > = {};
 
   updates.forEach((update) => {
     if (!update.date) return;
 
-    const date = new Date(update.date);
+    const date = new Date(
+      update.date
+    );
 
-    const key = date.toISOString().split("T")[0];
+    const key = date
+      .toISOString()
+      .split("T")[0];
 
-    counts[key] = (counts[key] || 0) + 1;
+    counts[key] =
+      (counts[key] || 0) + 1;
   });
 
   return (
     <div className="overflow-x-auto">
       <div className="flex min-w-[900px] gap-1">
         {days.map((date) => {
-          const key = date.toISOString().split("T")[0];
+          const key = date
+            .toISOString()
+            .split("T")[0];
 
-          const count = counts[key] || 0;
+          const count =
+            counts[key] || 0;
 
-          let level = "bg-[#21262d]";
+          let level =
+            "bg-[#21262d]";
 
           if (count === 1) {
             level = "bg-green-900";
@@ -389,7 +468,9 @@ function ContributionGraph({
             <div
               key={key}
               title={`${count} commit${
-                count === 1 ? "" : "s"
+                count === 1
+                  ? ""
+                  : "s"
               } · ${key}`}
               className={`h-4 w-4 shrink-0 rounded-sm ${level}`}
             />
@@ -407,45 +488,59 @@ function CommitModal({
 }: {
   onClose: () => void;
 }) {
-  const [person, setPerson] = useState("Sarthak");
+  const [person, setPerson] =
+    useState<MemberName>(
+      "Sarthak"
+    );
 
-  const [message, setMessage] = useState("");
+  const [message, setMessage] =
+    useState("");
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
-  const [error, setError] = useState("");
+  const [error, setError] =
+    useState("");
 
-  const [success, setSuccess] = useState("");
+  const [success, setSuccess] =
+    useState("");
 
   async function createCommit() {
     setError("");
     setSuccess("");
 
     if (!message.trim()) {
-      setError("Please enter what you changed.");
+      setError(
+        "Please enter what you changed."
+      );
+
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch(
-        "/api/github/commit",
-        {
-          method: "POST",
+      const response =
+        await fetch(
+          "/api/github/commit",
+          {
+            method: "POST",
 
-          headers: {
-            "Content-Type": "application/json",
-          },
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
 
-          body: JSON.stringify({
-            person,
-            message: message.trim(),
-          }),
-        }
-      );
+            body: JSON.stringify({
+              person,
+              message:
+                message.trim(),
+            }),
+          }
+        );
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
       if (!response.ok) {
         throw new Error(
@@ -492,6 +587,8 @@ function CommitModal({
           </button>
         </div>
 
+        {/* PERSON */}
+
         <label className="mb-2 block text-sm font-medium text-gray-400">
           Who made the update?
         </label>
@@ -499,7 +596,10 @@ function CommitModal({
         <select
           value={person}
           onChange={(event) =>
-            setPerson(event.target.value)
+            setPerson(
+              event.target
+                .value as MemberName
+            )
           }
           disabled={loading}
           className="mb-5 w-full rounded-lg border border-gray-700 bg-[#0d1117] p-3 text-white outline-none focus:border-green-500"
@@ -507,7 +607,10 @@ function CommitModal({
           <option>Sarthak</option>
           <option>Srihita</option>
           <option>Charvik</option>
+          <option>Lohitaksh</option>
         </select>
+
+        {/* MESSAGE */}
 
         <label className="mb-2 block text-sm font-medium text-gray-400">
           What did you update?
@@ -516,7 +619,9 @@ function CommitModal({
         <textarea
           value={message}
           onChange={(event) =>
-            setMessage(event.target.value)
+            setMessage(
+              event.target.value
+            )
           }
           disabled={loading}
           placeholder="Example: Added introduction slides"
@@ -524,17 +629,23 @@ function CommitModal({
           className="mb-4 w-full resize-none rounded-lg border border-gray-700 bg-[#0d1117] p-3 text-white outline-none placeholder:text-gray-600 focus:border-green-500"
         />
 
+        {/* ERROR */}
+
         {error && (
           <div className="mb-4 rounded-lg border border-red-800 bg-red-950/40 p-3 text-sm text-red-300">
             ❌ {error}
           </div>
         )}
 
+        {/* SUCCESS */}
+
         {success && (
           <div className="mb-4 rounded-lg border border-green-800 bg-green-950/40 p-3 text-sm text-green-300">
             ✅ {success}
           </div>
         )}
+
+        {/* BUTTONS */}
 
         <div className="flex justify-end gap-3">
           <button
@@ -550,7 +661,9 @@ function CommitModal({
             disabled={loading}
             className="rounded-lg bg-green-600 px-5 py-2 font-medium transition hover:bg-green-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "Creating..." : "Create Commit"}
+            {loading
+              ? "Creating..."
+              : "Create Commit"}
           </button>
         </div>
       </div>
@@ -560,8 +673,12 @@ function CommitModal({
 
 /* DATE FORMATTER */
 
-function formatDate(date: string | null) {
-  if (!date) return "Unknown time";
+function formatDate(
+  date: string | null
+) {
+  if (!date) {
+    return "Unknown time";
+  }
 
   const d = new Date(date);
 
